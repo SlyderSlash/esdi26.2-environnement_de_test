@@ -1,0 +1,25 @@
+{
+  "name": "test-training-functions",
+  "version": "1.0.0",
+  "description": "Fonctions pour l'entraînement aux tests unitaires avec Jest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": ["jest", "testing", "unit-tests", "training"],
+  "author": "Formateur",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "functions/**/*.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": ["text", "lcov", "html"]
+  }
+}
