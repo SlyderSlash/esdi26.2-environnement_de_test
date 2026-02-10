@@ -1,4 +1,5 @@
 const { callAPI, logIn } = require('../utils/api.js');
+const { randUserName, randPassword, randEmail } = require('@ngneat/falso')
 
 global.fetch = jest.fn();
 const localStorageMock = (()=> {
@@ -68,5 +69,48 @@ describe('logIn', () => {
             json: async () => mockData
         });
         await expect(logIn(username, password)).rejects.toThrow(DOMException)
+    })
+})
+
+describe('logIn - Mock', () => {
+    beforeEach(() => {
+        localStorage.clear()
+        jest.clearAllMocks()
+    })
+    it('should return the data when the API call is successful', async () => {
+        const username = randUserName();
+        const password = randPassword();
+        console.log(username, password)
+        const mockData = { token: 'NOzdezf5546zef46ezf158e4fz6', username };
+        fetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockData
+        });
+        const data = await logIn(username, password);
+        expect(fetch).toHaveBeenCalledWith('https://api.example.com/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+        expect(localStorage.setItem).toHaveBeenCalledWith('token', mockData.token);
+        expect(localStorage.getItem('token')).toBe(mockData.token);
+        expect(data).toEqual(mockData);
+    })
+    it('should return an error', async () => {
+        const username = randEmail();
+        const password = randEmail();
+        console.log(username, password)
+        const mockData = { token: 'NOzdezf5546zef46ezf158e4fz6', username };
+        fetch.mockResolvedValueOnce({
+            ok: true,
+            json: async () => mockData
+        });
+        const data = await logIn(username, password);
+        expect(fetch).toHaveBeenCalledWith('https://api.example.com/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+        expect(localStorage.setItem).toHaveBeenCalledWith('token', mockData.token);
+        expect(localStorage.getItem('token')).toBe(mockData.token);
+        expect(data).toEqual(mockData);
     })
 })
