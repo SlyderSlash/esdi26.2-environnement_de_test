@@ -4,6 +4,7 @@
 const app = require('../src/app')
 const request = require('supertest')
 const mongoose = require('mongoose')
+const connectDB = require('./../src/db')
 const { MongoDBContainer } = require('@testcontainers/mongodb')
 
 describe('User API', () => {
@@ -17,6 +18,13 @@ describe('User API', () => {
         db = mongoose.createConnection(container.getConnectionString(), {
             directConnection: true
         })
+        # Utilisation avec une base de donnée lié à l'API :
+         - On récupère la connection ( connectDB ) => const connectDB = require('./../src/db')
+         - On setup la variable d'environnement : process.env.MONGO_URI avec la connection string : container.getConnectionString()
+        process.env.MONGO_URI = container.getConnectionString()
+         - On appelle la connection connectDB()
+        connectDB()
+         - On peu lancer les tests ( avec connect pas de déco nécessaire cette fois )
     })
     afterAll(async () => {
         await db.close()
