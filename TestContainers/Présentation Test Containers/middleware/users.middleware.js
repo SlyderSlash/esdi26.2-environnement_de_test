@@ -5,7 +5,7 @@ const createUser = async (req, res, next) => {
         const { name } = req.body;
         const user = new User({ name });
         await user.save();
-        res.status(201).json(user);
+        res.status(201).json({user, jwt_secret: "REGARDER MON BEAU SECRET"});
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
